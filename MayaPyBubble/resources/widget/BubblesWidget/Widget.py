@@ -13,8 +13,8 @@ class PySideUiFileSetup(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(608, 422)
-        Form.horizontalLayout = QtGui.QHBoxLayout(Form)
-        Form.horizontalLayout.setObjectName("horizontalLayout")
+        Form.gridLayout = QtGui.QGridLayout(Form)
+        Form.gridLayout.setObjectName("gridLayout")
         Form.controlsBox = QtGui.QWidget(Form)
         Form.controlsBox.setObjectName("controlsBox")
         Form.verticalLayout = QtGui.QVBoxLayout(Form.controlsBox)
@@ -23,20 +23,25 @@ class PySideUiFileSetup(object):
         Form.label = QtGui.QLabel(Form.controlsBox)
         Form.label.setObjectName("label")
         Form.verticalLayout.addWidget(Form.label)
+        Form.exampleBtn = QtGui.QPushButton(Form.controlsBox)
+        Form.exampleBtn.setObjectName("exampleBtn")
+        Form.verticalLayout.addWidget(Form.exampleBtn)
         Form.homeBtn = QtGui.QPushButton(Form.controlsBox)
         Form.homeBtn.setObjectName("homeBtn")
         Form.verticalLayout.addWidget(Form.homeBtn)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         Form.verticalLayout.addItem(spacerItem)
-        Form.horizontalLayout.addWidget(Form.controlsBox)
+        Form.gridLayout.addWidget(Form.controlsBox, 0, 0, 1, 1)
         spacerItem1 = QtGui.QSpacerItem(439, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        Form.horizontalLayout.addItem(spacerItem1)
+        Form.gridLayout.addItem(spacerItem1, 0, 1, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        Form.label.setText(QtGui.QApplication.translate("Form", "Make Many Bubbles...  when done", None, QtGui.QApplication.UnicodeUTF8))
+        Form.label.setText(QtGui.QApplication.translate("Form", "Make Many Bubbles", None, QtGui.QApplication.UnicodeUTF8))
+        Form.exampleBtn.setText(QtGui.QApplication.translate("Form", "Make bubbles", None, QtGui.QApplication.UnicodeUTF8))
         Form.homeBtn.setText(QtGui.QApplication.translate("Form", "Return Home", None, QtGui.QApplication.UnicodeUTF8))
+
 

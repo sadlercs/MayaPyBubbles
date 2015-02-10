@@ -1,9 +1,8 @@
 # Christopher S Sadler
-# Bubbles
+# Bubble
 
 import nimble
 from nimble import cmds
-from random import randint
 from random import uniform
 from pyglass.widgets.PyGlassWidget import PyGlassWidget
 
@@ -26,10 +25,7 @@ class BubbleWidget(PyGlassWidget):
 
 #___________________________________________________________________________________________________ _handleReturnHome
     def _handleExampleButton(self):
-        """
-        This callback creates a polygonal cylinder in the Maya scene.
-
-        """
+        """ makes the bubble """
         x = 0
         y = 0
         z = 0
@@ -47,7 +43,7 @@ class BubbleWidget(PyGlassWidget):
         totalTime = 10 # number of seconds of animation
 
         maxKey = totalTime * keyStep * 10 # max num of keys for the time
-        randFrameStart = randint(1,maxKey) # Start randomly in time
+
         minHdev = -2.0 # max movement between horizon space
         maxHdev = 2.0 # max movement beteen horiz space
 
@@ -56,6 +52,12 @@ class BubbleWidget(PyGlassWidget):
 
         bubbleToTop = 1 # seconds for life of bubble
 
+        # Create Material
+        # Start bubble_mat
+        bubbleShader =  mayaShader('bubble_mat', (0.0,0.8,1.0), (0.9,0.9,0.9), (0.8,0.8,0.8), 'blinn')
+        bubbleShader.create()
+        #end bubble_mat
+
         # Create Spehere nurb, the [0] selects first node of object
         r = 1
         yUp = (0, 1, 0)	 	# start creation at y-up
@@ -63,13 +65,14 @@ class BubbleWidget(PyGlassWidget):
         d = 3 				# degree
         bNum = 1			# bNum is the bubble number
 
-        c = cmds.sphere( p=p, ax=yUp, ssw=0, esw=360, r=r, d=d, ut=0, tol=0.01, s=8, nsp=4, ch=1, n='bubble' + str(bNum))[0]
+        c = cmds.sphere(p=p, ax=yUp, ssw=0, esw=360, r=r, d=d, ut=0, tol=0.01, s=8, nsp=4, ch=1, n='bubble' + str(bNum))[0]
         cmds.select(c)
 
+        # Assign bubble_mat
+        cmds.hyperShade(a="bubble_mat")
 
 
         for i in xrange(1, maxKey, keyStep):
-        # for later use    for i in xrange(randFrameStart, maxKey, keyStep):
             cmds.currentTime( i )
             cmds.setKeyframe( v = y, at='translateY' )
             cmds.setKeyframe( v = x, at='translateX' )
@@ -105,3 +108,33 @@ class BubbleWidget(PyGlassWidget):
 #___________________________________________________________________________________________________ _handleReturnHome
     def _handleReturnHome(self):
         self.mainWindow.setActiveWidget('home')
+
+
+
+
+class mayaShader:
+    """A simple shader class"""
+    def __init__(self, name, color, trans, specClr, type,):
+        self.name = name
+        self.color = color
+        self.type = type
+        self.trans = trans
+        self.specClr = specClr
+
+    def create(self):
+        #checking if shader exists
+        shadExist = 0
+        allShaders = cmds.ls(mat=1)
+        for shadeCheck in allShaders:
+            if(shadeCheck == self.name):
+                shadExist = 1
+
+        if (shadExist == 0):
+            cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=self.name+"SG")
+            cmds.shadingNode(self.type, asShader=True, name=self.name)
+            # 0.0, 0.8, 1.0 color
+            cmds.setAttr( self.name+".color", self.color[0], self.color[1], self.color[2], type='double3')
+            #transparency between 0.8 - 0.9 is good
+            cmds.setAttr(self.name+".transparency", self.trans[0], self.trans[1], self.trans[2], type="double3")
+            cmds.setAttr( self.name+".specularColor", self.specClr[0], self.specClr[1], self.specClr[2], type='double3')
+            cmds.connectAttr(self.name+".outColor", self.name+"SG.surfaceShader", f=True)

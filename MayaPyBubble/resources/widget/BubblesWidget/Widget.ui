@@ -20,7 +20,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Assignment 2</string>
+         <string>Make Many Bubbles</string>
         </property>
        </widget>
       </item>

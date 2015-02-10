@@ -20,14 +20,14 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Assignment 1</string>
+         <string>Make one Bubble at origin</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="exampleBtn">
         <property name="text">
-         <string>Make a Cylinder</string>
+         <string>Make a bubble</string>
         </property>
        </widget>
       </item>
